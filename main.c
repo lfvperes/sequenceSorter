@@ -16,11 +16,10 @@ int main()
 
     while (fgets(buffer, BUFFER_LENGTH, fp))
     {
-        /* sorter(buffer); */
         sorter(buffer);
-        /* printf("%s\n", buffer); */
-        /* printf("%d", ch); */
+        // printf("%s\n", buffer);
     }
     fclose(fp);
+    free(buffer);
     return 0;
 }

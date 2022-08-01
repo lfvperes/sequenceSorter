@@ -1,3 +1,3 @@
 void sorter(char *strSeq);
 
-void parseCSV(char *strSeq);
+float parseCSV(char *strSeq, int *totalSeqSize, float *sequence);

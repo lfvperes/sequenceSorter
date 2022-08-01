@@ -4,23 +4,27 @@
 #define MAX_SEQUENCE_LENGTH 17
 #define TOTAL_DECIMAL_SPACES 5
 
-float parseCSV(char *strSeq, int *totalSeqSize);
+void parseCSV(char *strSeq, int *totalSeqSize, float *sequence);
+void showSequence(float *sequence, int seqSize);
 
 void sorter(char *strSeq) {
     
     int *seqSize = 0;
-    float seq = parseCSV(strSeq, seqSize);
-    printf("%.2f\n", seq);
-    // qsort(seq, sizeof(float));
+    float *sequence = malloc(sizeof(float) * MAX_SEQUENCE_LENGTH);
 
+    printf("new sequence: \n");
+    parseCSV(strSeq, seqSize, sequence);
+    
+    // qsort(sequence, sizeof(float), sizeof(float), compare);
+    // showSequence(sequence, *seqSize);
+
+    free(sequence);
 }
 
-float parseCSV(char *strSeq, int *totalSeqSize)
+void parseCSV(char *strSeq, int *totalSeqSize, float *sequence)
 {
-    printf("nova sequencia\n");
 
     char *newNumber = malloc(sizeof(char) * TOTAL_DECIMAL_SPACES);
-    float *sequence = malloc(sizeof(float) * MAX_SEQUENCE_LENGTH);
     int i = 0, currDecSpace = 0, seqSize = 0;
     while (strSeq[i] != '\0')
     {
@@ -44,16 +48,20 @@ float parseCSV(char *strSeq, int *totalSeqSize)
 
 
     sequence -= seqSize;
+
+    showSequence(sequence, seqSize);
+    
+    totalSeqSize = &seqSize;
+
+    free(newNumber);
+
+}
+
+void showSequence(float *sequence, int seqSize)
+{
     for (int i = 0; i < seqSize; i++)
     {
         printf("%.2f ", sequence[i]);
     }
-    
     printf("\n");
-    free(newNumber);
-    // free(sequence);
-
-    *totalSeqSize = seqSize;
-
-    return *sequence;
 }
