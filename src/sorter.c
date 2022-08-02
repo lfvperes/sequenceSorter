@@ -6,16 +6,18 @@
 
 void parseCSV(char *strSeq, int *totalSeqSize, float *sequence);
 void showSequence(float *sequence, int seqSize);
+int compare(const void *, const void *);
 
 void sorter(char *strSeq) {
     
     int *seqSize = 0;
     float *sequence = malloc(sizeof(float) * MAX_SEQUENCE_LENGTH);
 
-    printf("new sequence: \n");
+    // printf("new sequence: \n");
     parseCSV(strSeq, seqSize, sequence);
+    // showSequence(sequence, *seqSize);
     
-    // qsort(sequence, sizeof(float), sizeof(float), compare);
+    qsort(sequence, sizeof(float), sizeof(float), compare);
     // showSequence(sequence, *seqSize);
 
     free(sequence);
@@ -64,4 +66,9 @@ void showSequence(float *sequence, int seqSize)
         printf("%.2f ", sequence[i]);
     }
     printf("\n");
+}
+
+int compare(const void *a, const void *b)
+{
+    return *(int *)a - *(int *)b;
 }
