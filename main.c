@@ -5,21 +5,24 @@
 
 int main()
 {
-    char *filename = "inputFloatSequences.csv";
+    char *inputFilename = "inputFloatSequences.csv";
+    char *outputFilename = "outputFloatSequences.csv";
     
     /* char buffer[BUFFER_LENGTH]; */
     char *buffer = malloc(sizeof(char) * BUFFER_LENGTH);
 
-    FILE *fp = fopen(filename, "r");
+    FILE *inputFile = fopen(inputFilename, "r");
+    FILE *outputFile = fopen(outputFilename, "w");
 
     /* char *seq = buffer; */
 
-    while (fgets(buffer, BUFFER_LENGTH, fp))
+    while (fgets(buffer, BUFFER_LENGTH, inputFile))
     {
-        sorter(buffer);
+        sorter(buffer, outputFile);
         // printf("%s\n", buffer);
     }
-    fclose(fp);
+    fclose(inputFile);
+    fclose(outputFile);
     free(buffer);
     return 0;
 }
