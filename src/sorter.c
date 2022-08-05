@@ -10,7 +10,7 @@ void showSequence(float *sequence, int seqSize);
 int compare(const void *, const void *);
 char *sequenceToString(float *sequence, int seqSize);
 
-char *sorter(char *strSeq, FILE *outputFile)
+char *sorter(char *strSeq)
 {
     // memory to receive the sequence after converting to float
     float *sequence = malloc(sizeof(float) * MAX_SEQUENCE_LENGTH);
@@ -36,7 +36,7 @@ char *sorter(char *strSeq, FILE *outputFile)
 int parseCSV(char *strSeq, float *sequence)
 {
     // memory to store each number as the sequence is traversed
-    char *newNumber = malloc(sizeof(char) * SIGNIFICANT_DIGITS);
+    char *newNumber = malloc(sizeof(char) * (SIGNIFICANT_DIGITS + 1));
     int i = 0, currDecPlace = 0, seqSize = 0;
     
     // traversing the string until the end
@@ -93,12 +93,15 @@ char *sequenceToString(float *sequence, int seqSize)
     // memory to store the sorted array as a string
     // each number in the string has an extra character (comma or \n)
     char *newLine = malloc(sizeof(char) * (SIGNIFICANT_DIGITS + 1) * MAX_SEQUENCE_LENGTH);
-    char buffer[SIGNIFICANT_DIGITS];
+    // char buffer[SIGNIFICANT_DIGITS];
     for (int i = 0; i < seqSize; i++)
     {
         // convert each float number back to string and concatenate them
-        gcvt(sequence[i], SIGNIFICANT_DIGITS, buffer);
+        char *buffer = malloc(sizeof(char) * SIGNIFICANT_DIGITS);
+        sprintf(buffer, "%g", sequence[i]);
         strcat(newLine, buffer);
+        free(buffer);
+
         if (i < seqSize - 1)
         {
             strcat(newLine, ",");

@@ -1,1 +1,1 @@
-char *sorter(char *strSeq, FILE *outputFile);
+char *sorter(char *strSeq);

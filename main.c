@@ -15,7 +15,7 @@ int main()
 
     while (fgets(buffer, BUFFER_LENGTH, inputFile))
     {
-        char *newLine = sorter(buffer, outputFile);
+        char *newLine = sorter(buffer);
         fputs(newLine, outputFile);
     }
     fclose(inputFile);
