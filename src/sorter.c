@@ -12,24 +12,19 @@ char *sequenceToString(float *sequence, int seqSize);
 
 void sorter(char *strSeq, FILE *outputFile) {
     
-    // int *seqSize = 0;
     float *sequence = malloc(sizeof(float) * MAX_SEQUENCE_LENGTH);
 
     printf("\nnew sequence: \n");
     int seqSize = parseCSV(strSeq, sequence);
     showSequence(sequence, seqSize);
     
-    // printf("sorted: \n");
     qsort(sequence, seqSize, sizeof(float), compare);
     showSequence(sequence, seqSize);
 
-    // char newLine[seqSize+1];
     char *newLine = malloc(sizeof(char) * (seqSize + 1));
-    
     newLine = sequenceToString(sequence, seqSize);
-    // fputs(*newLine, outputFile);
-    
     printf("%s", newLine);
+    fputs(newLine, outputFile);    
 
     free(sequence);
 }
@@ -58,11 +53,7 @@ int parseCSV(char *strSeq, float *sequence)
     *(sequence++) = atof(newNumber);
     ++seqSize;
 
-
     sequence -= seqSize;
-
-    // showSequence(sequence, seqSize);
-    
 
     free(newNumber);
     return seqSize;
