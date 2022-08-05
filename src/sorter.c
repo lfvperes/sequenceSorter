@@ -10,7 +10,7 @@ void showSequence(float *sequence, int seqSize);
 int compare(const void *, const void *);
 char *sequenceToString(float *sequence, int seqSize);
 
-void sorter(char *strSeq, FILE *outputFile) {
+char *sorter(char *strSeq, FILE *outputFile) {
     
     float *sequence = malloc(sizeof(float) * MAX_SEQUENCE_LENGTH);
 
@@ -24,9 +24,9 @@ void sorter(char *strSeq, FILE *outputFile) {
     char *newLine = malloc(sizeof(char) * (seqSize + 1));
     newLine = sequenceToString(sequence, seqSize);
     printf("%s", newLine);
-    fputs(newLine, outputFile);    
 
     free(sequence);
+    return newLine;
 }
 
 int parseCSV(char *strSeq, float *sequence)
