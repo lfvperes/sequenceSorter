@@ -3,11 +3,11 @@
 #include "./include/sorter.h"
 #define BUFFER_LENGTH 104
 
-int main()
+int main(int argc, char const *argv[])
 {
-    char *inputFilename = "inputFloatSequences.csv";
-    char *outputFilename = "outputFloatSequences.csv";
-    
+    char *inputFilename = argv[1];
+    char *outputFilename = argv[2];
+
     char *buffer = malloc(sizeof(char) * BUFFER_LENGTH);
 
     FILE *inputFile = fopen(inputFilename, "r");
