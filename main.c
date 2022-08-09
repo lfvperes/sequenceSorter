@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "./include/sorter.h"
-#define BUFFER_LENGTH MAX_SEQUENCE_LENGTH * (SIGNIFICANT_DIGITS+1)
 
 int main(int argc, char const *argv[])
 {
