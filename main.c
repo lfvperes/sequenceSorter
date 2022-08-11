@@ -20,16 +20,17 @@ int main(int argc, char const *argv[])
     int fileSize = ftell(inputFile);
     fseek(inputFile, 0, SEEK_SET);
 
-    char *buffer = malloc(fileSize);
+    char *buffer = malloc(fileSize * sizeof(char));
 
     while (fgets(buffer, fileSize, inputFile))
     {
         char *newLine = sorter(buffer);
         fputs(newLine, outputFile);
+        free(newLine);
     }
     fclose(inputFile);
     fclose(outputFile);
     free(buffer);
-    // buffer = realloc(buffer, 0);
+
     return 0;
 }

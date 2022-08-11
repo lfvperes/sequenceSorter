@@ -1,51 +1,69 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAX_SEQUENCE_LENGTH 17
-#define SIGNIFICANT_DIGITS 5
-#define DECIMAL_PLACES 2
+#include ".././include/sorter.h"
+#define PHL true
 
-int parseCSV(char *strSeq, float *sequence);
+void parseCSV(char *strSeq, float *sequence);
 void showSequence(float *sequence, int seqSize);
 int compare(const void *, const void *);
 char *sequenceToString(float *sequence, int seqSize);
+int sizeOfSequence(char *strSeq);
 
 char *sorter(char *strSeq)
 {
-    // memory to receive the sequence after converting to float
-    float *sequence = malloc(sizeof(float) * MAX_SEQUENCE_LENGTH);
-
-    // extracts from a .csv line as string, converts to float array
     printf("\nnew sequence: \n");
-    int seqSize = parseCSV(strSeq, sequence);
+    // measuring the size of the sequence
+    int seqSize = sizeOfSequence(strSeq);
+    
+    float *sequence = malloc(sizeof(float) * seqSize);
+    // extracts from a .csv line as string, converts to float array
+    parseCSV(strSeq, sequence);
     showSequence(sequence, seqSize);
     
     // sorts float array
     qsort(sequence, seqSize, sizeof(float), compare);
     showSequence(sequence, seqSize);
 
+    // conditional compilation, shows min and max values of the sequence
+    #ifdef PHL
+        printf("min: %.2f max: %.2f\n", sequence[0], sequence[seqSize-1]);
+    #endif
+
     // converts the sorted array back to .csv line format as string
-    char *newLine = malloc(sizeof(char) * (seqSize + 1));
-    newLine = sequenceToString(sequence, seqSize);
+    char *newLine = sequenceToString(sequence, seqSize);
     printf("%s", newLine);
 
     free(sequence);
+    
     return newLine;
 }
 
-int parseCSV(char *strSeq, float *sequence)
+int sizeOfSequence(char *strSeq)
+{
+    // measuring the size of the sequence
+    int seqSize = 0;
+    for (int i = 0; strSeq[i] != '\0'; i++)
+    {
+        if ((strSeq[i] == ',') || (strSeq[i] == '\n'))
+            seqSize++;
+    }
+    return seqSize;
+}
+
+void parseCSV(char *strSeq, float *sequence)
 {
     // memory to store each number as the sequence is traversed
-    char *newNumber = malloc(sizeof(char) * (SIGNIFICANT_DIGITS + 1));
-    int i = 0, currDecPlace = 0, seqSize = 0;
+    char *newNumber = calloc((SIGNIFICANT_DIGITS + 1), sizeof(char));
     
+    int currDecPlace = 0;
     // traversing the string until the end
-    while (strSeq[i] != '\0')
+    while (*strSeq != '\0')
     {
         // continue to add characters to the same string if no comma was found
-        if (strSeq[i] != ',')
+        if ((*strSeq != ',') && (*strSeq != '\n'))
         {
-            newNumber[currDecPlace] = strSeq[i];
+            newNumber[currDecPlace] = *strSeq;
             // increments decimal place for the new iteration
             currDecPlace++;
         }
@@ -57,21 +75,13 @@ int parseCSV(char *strSeq, float *sequence)
             // clear to store next element
             memset(newNumber, 0, SIGNIFICANT_DIGITS);
             currDecPlace = 0;
-            // increases size counter
-            ++seqSize;
         }
-
-        ++i;
+        strSeq++;
     }
     // one iteration over
-    *(sequence++) = atof(newNumber);
-    ++seqSize;
-
-    // back to the beginning of the array
-    sequence -= seqSize;
+    // *(sequence++) = atof(newNumber);
 
     free(newNumber);
-    return seqSize;
 }
 
 void showSequence(float *sequence, int seqSize)
@@ -85,6 +95,7 @@ void showSequence(float *sequence, int seqSize)
 
 int compare(const void *a, const void *b)
 {
+    // compare function to be called by qsort
     return *(int *)a - *(int *)b;
 }
 
@@ -92,9 +103,12 @@ char *sequenceToString(float *sequence, int seqSize)
 {
     // memory to store the sorted array as a string
     // each number in the string has an extra character (comma or \n)
-    char *newLine = malloc(sizeof(char) * (SIGNIFICANT_DIGITS + 1) * MAX_SEQUENCE_LENGTH);
-    // char buffer[SIGNIFICANT_DIGITS];
-    for (int i = 0; i < seqSize; i++)
+    char *newLine = malloc(sizeof(char) * (SIGNIFICANT_DIGITS + 1) * seqSize);
+    // fills first block before loop to allow for string concatenation
+    sprintf(newLine, "%g", sequence[0]);
+    strcat(newLine, ",");
+    
+    for (int i = 1; i < seqSize; i++)
     {
         // convert each float number back to string and concatenate them
         char *buffer = malloc(sizeof(char) * SIGNIFICANT_DIGITS);
@@ -102,6 +116,7 @@ char *sequenceToString(float *sequence, int seqSize)
         strcat(newLine, buffer);
         free(buffer);
 
+        // add comma between numbers and escape at the end of the line
         if (i < seqSize - 1)
         {
             strcat(newLine, ",");
