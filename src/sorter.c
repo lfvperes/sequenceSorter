@@ -8,6 +8,7 @@ void parseCSV(char *strSeq, float *sequence);
 void showSequence(float *sequence, int seqSize);
 int compare(const void *, const void *);
 char *sequenceToString(float *sequence, int seqSize);
+char *sequenceToString2(float *sequence, int seqSize);
 int sizeOfSequence(char *strSeq);
 
 char *sorter(char *strSeq)
@@ -101,31 +102,23 @@ int compare(const void *a, const void *b)
 
 char *sequenceToString(float *sequence, int seqSize)
 {
-    // memory to store the sorted array as a string
-    // each number in the string has an extra character (comma or \n)
-    char *newLine = malloc(sizeof(char) * (SIGNIFICANT_DIGITS + 1) * seqSize);
-    // fills first block before loop to allow for string concatenation
-    sprintf(newLine, "%g", sequence[0]);
-    strcat(newLine, ",");
-    
-    for (int i = 1; i < seqSize; i++)
-    {
-        // convert each float number back to string and concatenate them
-        char *buffer = malloc(sizeof(char) * SIGNIFICANT_DIGITS);
-        sprintf(buffer, "%g", sequence[i]);
-        strcat(newLine, buffer);
-        free(buffer);
+    // each number can have 4 or 5 characters, plus the comma
+    // the complete line needs an extra character for the end of the string
+    // total of 6 characters per number
+    int maxLength = seqSize * (SIGNIFICANT_DIGITS) + 1;
+    char *buffer = malloc(sizeof(char) * maxLength);
 
-        // add comma between numbers and escape at the end of the line
-        if (i < seqSize - 1)
-        {
-            strcat(newLine, ",");
-        }
-        else
-        {
-            strcat(newLine, "\n");
-        }
+    // pointing to current and final positions of the buffer
+    char *cur = buffer;
+    const char *end = buffer + maxLength;
+
+    while (cur < end)
+    {
+        // appending a new formatted number from the sequence, not exceeding buffer size
+        // iterate over the sequence by one step
+        // iterate over the buffer by the amount of characters appended
+        cur += snprintf(cur, end-cur, "%.2f,", *(sequence++));
     }
 
-    return newLine;
+    return buffer;
 }

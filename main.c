@@ -26,6 +26,7 @@ int main(int argc, char const *argv[])
     {
         char *newLine = sorter(buffer);
         fputs(newLine, outputFile);
+        fputs("\n", outputFile); 
         free(newLine);
     }
     fclose(inputFile);
